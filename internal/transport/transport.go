@@ -26,7 +26,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"google.golang.org/grpc/internal/errorutils"
 	"io"
 	"net"
 	"sync"
@@ -34,6 +33,7 @@ import (
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/internal/errorutils"
 	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/resolver"
