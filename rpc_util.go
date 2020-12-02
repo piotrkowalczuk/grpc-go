@@ -841,7 +841,7 @@ func toRPCErr(err error) error {
 	case transport.ConnectionError:
 		return status.Error(codes.Unavailable, e.Desc)
 	default:
-		if err, ok := errorutils.ContextErr(err); ok {
+		if err := errorutils.ContextErr(err); err != nil {
 			return err
 		}
 	}

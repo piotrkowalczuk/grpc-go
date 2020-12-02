@@ -797,7 +797,7 @@ type channelzData struct {
 
 // ContextErr converts the error from context package into a status error.
 func ContextErr(err error) error {
-	if err, ok := errorutils.ContextErr(err); ok {
+	if err := errorutils.ContextErr(err); err != nil {
 		return err
 	}
 	return status.Errorf(codes.Internal, "Unexpected error from context packet: %v", err)

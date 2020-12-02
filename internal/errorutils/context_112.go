@@ -28,13 +28,13 @@ import (
 )
 
 // ContextErr converts the error from context package into a status error.
-// It returns false if given error is not coming from context package.
-func ContextErr(err error) (error, bool) {
+// It returns nil if given error is not coming from context package.
+func ContextErr(err error) error {
 	switch err {
 	case context.DeadlineExceeded:
-		return status.Error(codes.DeadlineExceeded, err.Error()), true
+		return status.Error(codes.DeadlineExceeded, err.Error())
 	case context.Canceled:
-		return status.Error(codes.Canceled, err.Error()), true
+		return status.Error(codes.Canceled, err.Error())
 	}
-	return nil, false
+	return nil
 }
