@@ -28,9 +28,7 @@
 package status
 
 import (
-	"context"
 	"fmt"
-
 	spb "google.golang.org/genproto/googleapis/rpc/status"
 
 	"google.golang.org/grpc/codes"
@@ -114,14 +112,12 @@ func Code(err error) codes.Code {
 // Status with codes.OK if err is nil, or a Status with codes.Unknown if err is
 // non-nil and not a context error.
 func FromContextError(err error) *Status {
-	switch err {
-	case nil:
+	if err == nil {
 		return nil
-	case context.DeadlineExceeded:
-		return New(codes.DeadlineExceeded, err.Error())
-	case context.Canceled:
-		return New(codes.Canceled, err.Error())
-	default:
-		return New(codes.Unknown, err.Error())
 	}
+	if sts, ok := contextStatus(err); ok {
+		return sts
+	}
+
+	return New(codes.Unknown, err.Error())
 }

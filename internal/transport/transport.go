@@ -26,6 +26,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"google.golang.org/grpc/internal/errorutils"
 	"io"
 	"net"
 	"sync"
@@ -796,11 +797,8 @@ type channelzData struct {
 
 // ContextErr converts the error from context package into a status error.
 func ContextErr(err error) error {
-	switch err {
-	case context.DeadlineExceeded:
-		return status.Error(codes.DeadlineExceeded, err.Error())
-	case context.Canceled:
-		return status.Error(codes.Canceled, err.Error())
+	if err, ok := errorutils.ContextErr(err); ok {
+		return err
 	}
 	return status.Errorf(codes.Internal, "Unexpected error from context packet: %v", err)
 }

@@ -24,6 +24,7 @@ import (
 	"context"
 	"encoding/binary"
 	"fmt"
+	"google.golang.org/grpc/internal/errorutils"
 	"io"
 	"io/ioutil"
 	"math"
@@ -840,11 +841,8 @@ func toRPCErr(err error) error {
 	case transport.ConnectionError:
 		return status.Error(codes.Unavailable, e.Desc)
 	default:
-		switch err {
-		case context.DeadlineExceeded:
-			return status.Error(codes.DeadlineExceeded, err.Error())
-		case context.Canceled:
-			return status.Error(codes.Canceled, err.Error())
+		if err, ok := errorutils.ContextErr(err); ok {
+			return err
 		}
 	}
 	return status.Error(codes.Unknown, err.Error())
